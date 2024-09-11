@@ -1,4 +1,5 @@
 import express from 'express';
+import { currentUserRouter, signoutRouter, signupRouter, signinRouter } from './routes';
 
 //* app
 const app = express();
@@ -6,9 +7,10 @@ const app = express();
 //* middleware
 app.use(express.json());
 
-app.get('/api/users/currentuser', (req, res) => { 
-  res.send('Hi there!');
- });
+app.use('/api', currentUserRouter);
+app.use('/api', signinRouter);
+app.use("/api", signupRouter);
+app.use('/api', signoutRouter);
 
 //* listen
 app.listen(3000, () => {
