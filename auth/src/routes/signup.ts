@@ -1,7 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 import { RequestValidationError, BadRequestError } from "../errors";
 import User from "../models/user";
+
 
 const router = Router();
 
@@ -20,8 +22,6 @@ router.post(
       return next(new RequestValidationError(errors.array()));
     }
     const { email, password } = req.body;
-
-    console.log("Creating a user...");
     
 
     try {
@@ -31,13 +31,19 @@ router.post(
         return next(new BadRequestError("Email in use"));
       }
 
-      //TODO: hash password
-
       //* create user
       const user = User.build({ email, password });
       await user.save();
 
-      //TODO: generate jwt
+      //* generate jwt
+      const userJwt = jwt.sign({
+        id: user._id,
+        email: user.email,
+      }, process.env.JWT_KEY!);
+      //* store jwt on session object
+      req.session = {
+        jwt: userJwt,
+      };
 
       //* send response
       res.status(201).json(user);
