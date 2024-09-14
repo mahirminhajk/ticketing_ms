@@ -5,7 +5,6 @@ import { BadRequestError } from "../errors";
 import User from "../models/user";
 import { validateRequest } from "../middleware";
 
-
 const router = Router();
 
 router.post(
@@ -20,11 +19,10 @@ router.post(
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-    
 
     try {
       //* existing user
-      const existingUser = await User.findOne({email});
+      const existingUser = await User.findOne({ email });
       if (existingUser) {
         return next(new BadRequestError("Email in use"));
       }
@@ -34,10 +32,13 @@ router.post(
       await user.save();
 
       //* generate jwt
-      const userJwt = jwt.sign({
-        id: user._id,
-        email: user.email,
-      }, process.env.JWT_KEY!);
+      const userJwt = jwt.sign(
+        {
+          id: user._id,
+          email: user.email,
+        },
+        process.env.JWT_KEY!
+      );
       //* store jwt on session object
       req.session = {
         jwt: userJwt,
@@ -45,7 +46,6 @@ router.post(
 
       //* send response
       res.status(201).json(user);
-
     } catch (error) {
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));

@@ -6,54 +6,57 @@ import { Password } from "../services";
 type userAttrsType = {
   email: string;
   password: string;
-}
+};
 //* interface for user model
 interface IUserModel extends Model<IUser> {
   build(attrs: userAttrsType): IUser;
 }
 
 //* user schema
-const userSchema: Schema<IUser> = new Schema({
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-}, {
-  toJSON: {
-    transform(doc, ret) {
-      ret.id = ret._id;
-      delete ret._id;
-      delete ret.password;
-      delete ret.__v;
+const userSchema: Schema<IUser> = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
   },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 //* middleware for password hashing
 userSchema.pre("save", async function (next) {
-    const user = this;
-    if (user.isModified("password")) {
-        const hashed = Password.toHash(user.get("password"));
-        user.set("password", hashed);
-    }
-    next();
+  const user = this;
+  if (user.isModified("password")) {
+    const hashed = Password.toHash(user.get("password"));
+    user.set("password", hashed);
+  }
+  next();
 });
 
 //* static methods for user model
 userSchema.statics.build = (attrs: userAttrsType) => {
-    return new User(attrs);
+  return new User(attrs);
 };
 
 //* user model
 const User: IUserModel = model<IUser, IUserModel>("User", userSchema);
 
 User.build({
-    email: "ddk@dk",
-    password: "dkd",
+  email: "ddk@dk",
+  password: "dkd",
 });
 
 //* export

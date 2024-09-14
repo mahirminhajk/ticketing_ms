@@ -18,7 +18,6 @@ const app = express();
 app.set("trust proxy", true);
 //* rejectUnauthorized - throw error if https is not used
 
-
 //* middleware
 app.use(express.json());
 app.use(
