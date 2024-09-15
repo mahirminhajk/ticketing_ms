@@ -7,8 +7,8 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  //* log
-  console.error(err);
+  //* remove comment to see error in console
+  // console.error(err);
 
   if (err instanceof CustomError) {
     return res.status(err.statusCode).json({ errors: err.serializeErrors() });
