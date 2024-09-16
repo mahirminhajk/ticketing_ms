@@ -1,14 +1,16 @@
 "use client";
 import { useEffect } from "react";
-import Router from "next/router";
+import { useRouter } from "next/navigation";
 import useRequest from "../../../hooks/use-request";
 
 export default () => {
+  const router = useRouter();
+
   const { doRequest } = useRequest({
     url: "/api/users/signout",
-    method: "post",
+    method: "get",
     body: {},
-    onSuccess: () => Router.push("/"),
+    onSuccess: () => router.push("/"),
   });
 
   useEffect(() => {

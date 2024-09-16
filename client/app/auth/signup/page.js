@@ -1,9 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
-import Router from "next/router";
+import { useState } from "react";
+import {useRouter} from "next/navigation";
 import useRequest from "../../../hooks/use-request";
 
 export default () => {
+
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { doRequest, errors } = useRequest({
@@ -13,7 +16,7 @@ export default () => {
       email,
       password,
     },
-    onSuccess: () => Router.push("/"),
+    onSuccess: () => router.push("/"),
   });
 
   const onSubmit = async (event) => {
