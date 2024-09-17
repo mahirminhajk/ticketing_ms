@@ -7,8 +7,7 @@ import {
 } from "./routes";
 import cookieSession from "cookie-session";
 
-import { errorHandler } from "./middleware";
-import { NotFoundError } from "./errors";
+import { errorHandler, NotFoundError } from "@km12dev/common";
 
 //* app
 const app = express();

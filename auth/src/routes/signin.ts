@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { body } from "express-validator";
 import jwt from "jsonwebtoken";
+import { validateRequest, BadRequestError } from "@km12dev/common";
 
-import { BadRequestError } from "../errors";
 import User from "../models/user";
 import { Password } from "../services";
-import { validateRequest } from "../middleware";
 
 const router = Router();
 

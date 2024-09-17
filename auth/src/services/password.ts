@@ -1,8 +1,4 @@
-import {scrypt, scryptSync, randomBytes } from 'node:crypto';
-import { promisify } from 'node:util';
-
-
-
+import {scryptSync, randomBytes } from 'node:crypto';
 export class Password{
     static toHash(password: string):string{
         const salt = randomBytes(8).toString('hex');

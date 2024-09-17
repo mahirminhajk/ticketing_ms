@@ -1,5 +1,5 @@
 import {  Request, Response, Router } from "express";
-import { currentUser } from "../middleware";
+import { currentUser } from "@km12dev/common";
 
 const router = Router();
 
