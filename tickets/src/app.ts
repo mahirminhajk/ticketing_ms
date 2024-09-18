@@ -1,7 +1,8 @@
 import express from "express";
 import cookieSession from "cookie-session";
 
-import { errorHandler, NotFoundError } from "@km12dev/common";
+import { currentUser, errorHandler, NotFoundError } from "@km12dev/common";
+import { createNewTicketRouter } from "./routes";
 
 //* app
 const app = express();
@@ -18,8 +19,10 @@ app.use(
     secure: process.env.NODE_ENV !== "test",
   })
 );
+app.use(currentUser);
 
 //* routes
+app.use(createNewTicketRouter);
 
 //* not found route
 app.all("*", () => {

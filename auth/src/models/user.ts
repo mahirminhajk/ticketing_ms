@@ -54,10 +54,5 @@ userSchema.statics.build = (attrs: userAttrsType) => {
 //* user model
 const User: IUserModel = model<IUser, IUserModel>("User", userSchema);
 
-User.build({
-  email: "ddk@dk",
-  password: "dkd",
-});
-
 //* export
 export default User;

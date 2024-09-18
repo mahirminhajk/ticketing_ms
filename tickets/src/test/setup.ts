@@ -1,6 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import app from "../app";
 
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
@@ -10,7 +9,7 @@ beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
   await mongoose.connect(mongoUri);
-});
+}, 130000);
 
 beforeAll(async () => {
   await mongoose.connection.dropDatabase();
