@@ -1,9 +1,13 @@
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 //? mock a user sign in, by creating a session cookie
 export const signin = () => {
+
+  const id = new mongoose.Types.ObjectId().toHexString();
+
   const payload = {
-    id: "1234",
+    id,
     email: "test@test.com",
   };
 

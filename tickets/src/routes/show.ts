@@ -1,6 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { body } from "express-validator";
-import { BadRequestError, validateRequest } from "@km12dev/common";
+import { BadRequestError, NotFoundError } from "@km12dev/common";
 
 import Tickets from "../model/ticket";
 
@@ -13,7 +12,7 @@ router.get(
     try {
       const ticket = await Tickets.findById(id);
       if (!ticket) {
-        return next(new BadRequestError("Ticket not found"));
+        return next(new NotFoundError());
       }
 
       return res.status(200).json(ticket);

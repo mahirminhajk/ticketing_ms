@@ -9,7 +9,7 @@ it("return a 404 if the ticket is not found", async () => {
     await request(app)
     .get(`/api/tickets/${id}`)
     .send({})
-    .expect(400);
+    .expect(404);
 });
 
 it("return the ticket if the ticket is found", async () => {
