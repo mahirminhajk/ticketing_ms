@@ -1,7 +1,6 @@
 import request from "supertest";
 import app from "../../app";
 import { signin } from "../../test/helpers";
-import tickets from "../../model/ticket";
 
 it("return a 404 if the ticket is not found", async () => {
   
