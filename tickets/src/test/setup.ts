@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
+jest.mock("../nats-wrapper");
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
   //* env variables
@@ -11,7 +12,8 @@ beforeAll(async () => {
   await mongoose.connect(mongoUri);
 }, 130000);
 
-beforeAll(async () => {
+beforeEach(async () => {
+  jest.clearAllMocks();
   await mongoose.connection.dropDatabase();
 });
 
