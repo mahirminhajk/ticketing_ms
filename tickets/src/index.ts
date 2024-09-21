@@ -1,5 +1,6 @@
 import app from "./app";
 import mongoose from "mongoose";
+import { natsWrapper } from "./nats-wrapper";
 
 //* connect to mongodb
 const startServer = async () => {
@@ -12,6 +13,22 @@ const startServer = async () => {
   }
 
   try {
+    //* connect to nats
+    await natsWrapper.connect(
+      'ticketing',
+      'laskjf',
+      'http://nats-srv:4222'
+    );
+
+    natsWrapper.client.on("close", () => {
+      console.log("NATS connection closed");
+      process.exit();
+    });
+
+    //* listen for termination signals
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to Auth mongodb");
   } catch (error) {

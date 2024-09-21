@@ -1,8 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import { BadRequestError, validateRequest, requireAuth } from "@km12dev/common";
+import { TicketCreatedPublisher } from "../events/publishers";
 
 import Tickets from "../model/ticket";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
@@ -26,6 +28,14 @@ router.post(
       });
 
       await ticket.save();
+
+      //* Publishing an event
+      new TicketCreatedPublisher(natsWrapper.client).publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: parseInt(ticket.price),
+        userId: ticket.userId,
+      });
 
       return res.status(201).json(ticket);
     } catch (error) {

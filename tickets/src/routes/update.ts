@@ -9,6 +9,8 @@ import {
 } from "@km12dev/common";
 
 import Tickets from "../model/ticket";
+import { TicketUpdatedPublisher } from "../events/publishers";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
@@ -25,7 +27,7 @@ router.put(
   async (req: Request, res: Response, next: NextFunction) => {
     const { title, price } = req.body;
     try {
-      const ticket = await Tickets.findById(req.params.id); 
+      const ticket = await Tickets.findById(req.params.id);
       if (!ticket) {
         return next(new NotFoundError());
       }
@@ -41,8 +43,15 @@ router.put(
 
       await ticket.save();
 
+      new TicketUpdatedPublisher(natsWrapper.client).publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: parseInt(ticket.price),
+        userId: ticket.userId,
+      });
+
       return res.status(201).json({});
-    } catch (error) {
+    } catch (error) {  
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));
       }
