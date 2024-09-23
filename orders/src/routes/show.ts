@@ -1,21 +1,27 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { BadRequestError, NotFoundError } from "@km12dev/common";
+import { BadRequestError, NotFoundError, requireAuth } from "@km12dev/common";
 
-import Tickets from "../model/order";
+import orders from "../model/order";
 
 const router = Router();
 
 router.get(
-  "/api/orders/:id",
+  "/api/orders/:orderId",
+  requireAuth,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+    const { orderId } = req.params;
     try {
-      const ticket = await Tickets.findById(id);
-      if (!ticket) {
+     
+      const order = await orders.findById(orderId).populate("ticket");
+      if (!order) {
         return next(new NotFoundError());
       }
 
-      return res.status(200).json(ticket);
+      if (order.userId !== req.currentUser!.id) {
+        return next(new BadRequestError("Not authorized"));
+      }
+
+      return res.status(200).json(order);
     } catch (error) {
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));

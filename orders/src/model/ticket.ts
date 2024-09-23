@@ -1,10 +1,12 @@
 import { Model, model, Schema } from "mongoose";
 import { ITickets } from "../types";
+import { OrderStatus } from "@km12dev/common";
+import Orders from "./order"; 
 
 //* interface for simple tickets Attributes
 type ticketsAttrsType = {
   title: string;
-  price: string;
+  price: Number;
 };
 //* interface for tickets model
 interface ITicketsModel extends Model<ITickets> {
@@ -38,6 +40,20 @@ const ticketsSchema: Schema<ITickets> = new Schema(
 ticketsSchema.statics.build = (attrs: ticketsAttrsType) => {
   return new tickets(attrs);
 };
+
+ticketsSchema.methods.isReserved = async function () {
+  const existingOrder = await Orders.findOne({
+    ticket: this,
+    status: {
+      $in: [
+        OrderStatus.Created,
+        OrderStatus.AwaitingPayment,
+        OrderStatus.Complete,
+      ],
+    },
+  });
+  return !!existingOrder;
+}
 
 //* tickets model
 const tickets: ITicketsModel = model<ITickets, ITicketsModel>(

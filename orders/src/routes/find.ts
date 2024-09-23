@@ -1,16 +1,21 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { BadRequestError } from "@km12dev/common";
+import { BadRequestError, requireAuth } from "@km12dev/common";
 
-import Tickets from "../model/order";
+import orders from "../model/order";
 
 const router = Router();
 
 router.get(
   "/api/orders",
+  requireAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const tickets = await Tickets.find({});
-      return res.status(200).json(tickets);
+      const order = await orders
+        .find({
+          userId: req.currentUser!.id,
+        })
+        .populate("ticket");
+      res.status(200).json(order);
     } catch (error) {
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));

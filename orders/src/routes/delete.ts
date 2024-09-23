@@ -6,9 +6,10 @@ import {
   requireAuth,
   NotFoundError,
   NotAuthorizedError,
+  OrderStatus,
 } from "@km12dev/common";
 
-import Tickets from "../model/order";
+import Order from "../model/order";
 import { TicketUpdatedPublisher } from "../events/publishers";
 import { natsWrapper } from "../nats-wrapper";
 
@@ -25,32 +26,33 @@ router.delete(
   ],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { title, price } = req.body;
+    const { id } = req.params;
     try {
-      const ticket = await Tickets.findById(req.params.id);
-      if (!ticket) {
+     
+      const order = await Order.findById(id).populate("ticket");
+
+      if (!order) {
         return next(new NotFoundError());
       }
 
-      if (ticket.userId !== req.currentUser!.id) {
+      if (order.userId !== req.currentUser!.id) {
         return next(new NotAuthorizedError());
       }
 
-      ticket.set({
-        title,
-        price,
-      });
+      order.status = OrderStatus.Cancelled;
+      await order.save();
 
-      await ticket.save();
+      // new TicketUpdatedPublisher(natsWrapper.client).publish({
+      //   id: order.ticket.id,
+      //   title: order.ticket.title,
+      //   price: order.ticket.price,
+      //   userId: order.ticket.userId,
+      //   orderId: order.id,
+      //   version: order.ticket.version,
+      // });
 
-      new TicketUpdatedPublisher(natsWrapper.client).publish({
-        id: ticket.id,
-        title: ticket.title,
-        price: parseInt(ticket.price),
-        userId: ticket.userId,
-      });
 
-      return res.status(201).json({});
+      return res.status(201).json(order);
     } catch (error) {  
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));

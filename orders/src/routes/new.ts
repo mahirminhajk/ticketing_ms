@@ -1,10 +1,13 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
-import { BadRequestError, validateRequest, requireAuth } from "@km12dev/common";
+import { BadRequestError, validateRequest, requireAuth, OrderStatus } from "@km12dev/common";
 import { TicketCreatedPublisher } from "../events/publishers";
 
-import Tickets from "../model/order";
+import Orders from "../model/order";
+import Tickets from "../model/ticket";
 import { natsWrapper } from "../nats-wrapper";
+
+const EXPIRATION_WINDOW_SECONDS = 1 * 60;
 
 const router = Router();
 
@@ -21,25 +24,32 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { title, price } = req.body;
+    const { ticketId } = req.body;
     try {
-      const ticket = Tickets.build({
-        title,
-        price,
+
+      const ticket = await Tickets.findById(ticketId);
+      if (!ticket) {
+        return next(new BadRequestError("Ticket not found"));
+      }
+
+      const isReserved = await ticket.isReserved();
+      if(isReserved) {
+        return next(new BadRequestError("Ticket is already reserved"));
+      }
+
+      const expiration = new Date();
+      expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
+
+      const order = Orders.build({
         userId: req.currentUser!.id,
+        status: OrderStatus.Created,
+        expiresAt: expiration,
+        ticket,
       });
 
-      await ticket.save();
-
-      //* Publishing an event
-      new TicketCreatedPublisher(natsWrapper.client).publish({
-        id: ticket.id,
-        title: ticket.title,
-        price: parseInt(ticket.price),
-        userId: ticket.userId,
-      });
-
-      return res.status(201).json(ticket);
+      await order.save();
+      
+      return res.status(201).json(order);
     } catch (error) {
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));
