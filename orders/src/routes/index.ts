@@ -1,4 +1,4 @@
-export { default as createNewTicketRouter } from "./new";
-export { default as showTicketRouter } from "./show";
-export { default as findTicketRouter } from "./find";
-export { default as updateTicketRouter } from "./update";
+export { default as createNewOrderRouter } from "./new";
+export { default as showOrderRouter } from "./show";
+export { default as findOrderRouter } from "./find";
+export { default as deleteOrderRouter } from "./delete";

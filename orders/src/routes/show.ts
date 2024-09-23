@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { BadRequestError, NotFoundError } from "@km12dev/common";
 
-import Tickets from "../model/ticket";
+import Tickets from "../model/order";
 
 const router = Router();
 
 router.get(
-  "/api/tickets/:id",
+  "/api/orders/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {

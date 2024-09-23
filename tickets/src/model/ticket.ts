@@ -46,7 +46,7 @@ ticketsSchema.statics.build = (attrs: ticketsAttrsType) => {
 
 //* tickets model
 const tickets: ITicketsModel = model<ITickets, ITicketsModel>(
-  "tickets",
+  "ticket",
   ticketsSchema
 );
 

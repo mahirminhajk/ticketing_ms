@@ -5,7 +5,6 @@ import { ITickets } from "../types";
 type ticketsAttrsType = {
   title: string;
   price: string;
-  userId: string;
 };
 //* interface for tickets model
 interface ITicketsModel extends Model<ITickets> {
@@ -22,10 +21,7 @@ const ticketsSchema: Schema<ITickets> = new Schema(
     price: {
       type: String,
       required: true,
-    },
-    userId: {
-      type: String,
-      required: true,
+      min: 0,
     },
   },
   {
@@ -33,7 +29,6 @@ const ticketsSchema: Schema<ITickets> = new Schema(
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.__v;
       },
     },
   }
@@ -46,7 +41,7 @@ ticketsSchema.statics.build = (attrs: ticketsAttrsType) => {
 
 //* tickets model
 const tickets: ITicketsModel = model<ITickets, ITicketsModel>(
-  "tickets",
+  "ticket",
   ticketsSchema
 );
 

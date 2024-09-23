@@ -2,7 +2,7 @@ import express from "express";
 import cookieSession from "cookie-session";
 
 import { currentUser, errorHandler, NotFoundError } from "@km12dev/common";
-import { createNewTicketRouter, findTicketRouter, showTicketRouter, updateTicketRouter } from "./routes";
+import {createNewOrderRouter, findOrderRouter, showOrderRouter, deleteOrderRouter } from "./routes";
 
 //* app
 const app = express();
@@ -22,10 +22,10 @@ app.use(
 app.use(currentUser);
 
 //* routes
-app.use(createNewTicketRouter);
-app.use(showTicketRouter);
-app.use(findTicketRouter);
-app.use(updateTicketRouter);
+app.use(createNewOrderRouter);
+app.use(findOrderRouter);
+app.use(showOrderRouter);
+app.use(deleteOrderRouter);
 
 //* not found route
 app.all("*", () => {

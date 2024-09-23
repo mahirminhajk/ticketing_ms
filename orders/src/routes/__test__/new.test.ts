@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../app";
 import { signin } from "../../test/helpers";
-import tickets from "../../model/ticket";
+import tickets from "../../model/order";
 
 import { natsWrapper } from "../../nats-wrapper";
 

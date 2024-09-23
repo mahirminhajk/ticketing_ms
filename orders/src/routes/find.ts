@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { BadRequestError } from "@km12dev/common";
 
-import Tickets from "../model/ticket";
+import Tickets from "../model/order";
 
 const router = Router();
 
 router.get(
-  "/api/tickets",
+  "/api/orders",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tickets = await Tickets.find({});

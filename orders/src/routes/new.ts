@@ -3,19 +3,21 @@ import { body } from "express-validator";
 import { BadRequestError, validateRequest, requireAuth } from "@km12dev/common";
 import { TicketCreatedPublisher } from "../events/publishers";
 
-import Tickets from "../model/ticket";
+import Tickets from "../model/order";
 import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
 router.post(
-  "/api/tickets",
+  "/api/orders",
   requireAuth,
   [
-    body("title").not().isEmpty().withMessage("Title is required"),
-    body("price")
-      .isFloat({ gt: 0 })
-      .withMessage("Price must be greater than 0"),
+    body("ticketId")
+      .not()
+      .isEmpty()
+      .withMessage("TicketId is required")
+      .isMongoId()
+      .withMessage("TicketId must be a valid MongoDB id"),
   ],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
