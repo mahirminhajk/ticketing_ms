@@ -50,7 +50,7 @@ router.put(
         userId: ticket.userId,
       });
 
-      return res.status(201).json({});
+      return res.status(201).json(ticket);
     } catch (error) {  
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));

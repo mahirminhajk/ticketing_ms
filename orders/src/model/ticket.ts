@@ -5,6 +5,7 @@ import Orders from "./order";
 
 //* interface for simple tickets Attributes
 type ticketsAttrsType = {
+  id: string;
   title: string;
   price: Number;
 };
@@ -38,7 +39,11 @@ const ticketsSchema: Schema<ITickets> = new Schema(
 
 //* static methods for tickets model
 ticketsSchema.statics.build = (attrs: ticketsAttrsType) => {
-  return new tickets(attrs);
+  return new tickets({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+  });
 };
 
 ticketsSchema.methods.isReserved = async function () {
