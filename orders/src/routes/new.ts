@@ -1,11 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import { BadRequestError, validateRequest, requireAuth, OrderStatus } from "@km12dev/common";
-import { TicketCreatedPublisher } from "../events/publishers";
 
 import Orders from "../model/order";
 import Tickets from "../model/ticket";
 import { natsWrapper } from "../nats-wrapper";
+import { OrderCreatedPublisher } from "../events/publishers";
 
 const EXPIRATION_WINDOW_SECONDS = 1 * 60;
 
@@ -48,6 +48,19 @@ router.post(
       });
 
       await order.save();
+
+
+      new OrderCreatedPublisher(natsWrapper.client).publish({
+        id: order.id,
+        status: order.status,
+        userId: order.userId,
+        expiresAt: order.expiresAt.toISOString(),
+        ticket: {
+          id: ticket.id,
+          price: parseInt(ticket.price),
+        },
+      }); 
+
       
       return res.status(201).json(order);
     } catch (error) {

@@ -10,7 +10,7 @@ import {
 } from "@km12dev/common";
 
 import Order from "../model/order";
-import { TicketUpdatedPublisher } from "../events/publishers";
+import { OrderCancelledPublisher } from "../events/publishers";
 import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
@@ -42,14 +42,12 @@ router.delete(
       order.status = OrderStatus.Cancelled;
       await order.save();
 
-      // new TicketUpdatedPublisher(natsWrapper.client).publish({
-      //   id: order.ticket.id,
-      //   title: order.ticket.title,
-      //   price: order.ticket.price,
-      //   userId: order.ticket.userId,
-      //   orderId: order.id,
-      //   version: order.ticket.version,
-      // });
+      new OrderCancelledPublisher(natsWrapper.client).publish({
+        id: order.ticket.id,
+        ticket: {
+          id: order.ticket.id,
+        },
+      });
 
 
       return res.status(201).json(order);
