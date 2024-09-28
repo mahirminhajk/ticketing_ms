@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@km12dev/common':
-        specifier: ^1.0.6
-        version: 1.0.6
+        specifier: ^1.0.9
+        version: 1.0.9
       '@types/cookie-session':
         specifier: ^2.0.49
         version: 2.0.49
@@ -344,8 +344,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@km12dev/common@1.0.6':
-    resolution: {integrity: sha512-S5Uh4jU+MQCUhRaleJ9QhRXUDBIh6p/uesv8tV1Xb8owDpv72H837fSxouQswp/iNsVVxOBGCyG4syjL1fzQzg==}
+  '@km12dev/common@1.0.9':
+    resolution: {integrity: sha512-LhzCobBd3CjpuJcqApRub9W4ogeaPI/oWdTOOt7Ee+LD4sjMVXp47xyv5swGH94EoT3jjvksdELc910lVjA8Vg==}
 
   '@mongodb-js/saslprep@1.1.9':
     resolution: {integrity: sha512-tVkljjeEaAhCqTzajSdgbQ6gE6f3oneVwa3iXR6csiEwXXOFsiC6Uh9iAjAhXPtqa/XMDHWjjeNH/77m/Yq2dw==}
@@ -2513,7 +2513,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@km12dev/common@1.0.6':
+  '@km12dev/common@1.0.9':
     dependencies:
       '@types/cookie-session': 2.0.49
       '@types/express': 4.17.21
