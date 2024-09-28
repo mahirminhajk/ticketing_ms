@@ -1,5 +1,6 @@
 import { Model, model, Schema } from "mongoose";
 import { ITickets } from "../types";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 //* interface for simple tickets Attributes
 type ticketsAttrsType = {
@@ -33,11 +34,13 @@ const ticketsSchema: Schema<ITickets> = new Schema(
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.__v;
       },
     },
   }
 );
+
+ticketsSchema.set("versionKey", "version");
+ticketsSchema.plugin(updateIfCurrentPlugin);
 
 //* static methods for tickets model
 ticketsSchema.statics.build = (attrs: ticketsAttrsType) => {

@@ -5,7 +5,7 @@ import Orders from "./order";
 
 //* interface for simple tickets Attributes
 type ticketsAttrsType = {
-  id: string;
+  id?: string;
   title: string;
   price: Number;
 };
