@@ -33,7 +33,7 @@ const orderSchema: Schema<IOrders> = new Schema(
     },
     ticket: {
       type: Schema.Types.ObjectId,
-      ref: "Ticket",
+      ref: "ticket",
     },
   },
   {

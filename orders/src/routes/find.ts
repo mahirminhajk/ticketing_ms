@@ -10,13 +10,12 @@ router.get(
   requireAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const order = await orders
-        .find({
-          userId: req.currentUser!.id,
-        })
-        .populate("ticket");
+      const order = await orders.find({
+        userId: req.currentUser!.id,
+      })
+      .populate("ticket");
       res.status(200).json(order);
-    } catch (error) {
+    } catch (error) {      
       if (error instanceof Error) {
         return next(new BadRequestError(error.message));
       }
