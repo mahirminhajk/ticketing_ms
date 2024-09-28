@@ -1,6 +1,7 @@
 import { Model, model, Schema } from "mongoose";
 import { IOrders, ITickets } from "../types";
 import { OrderStatus } from "@km12dev/common";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 //* interface for simple order Attributes
 type orderAttrsType = {
@@ -45,6 +46,10 @@ const orderSchema: Schema<IOrders> = new Schema(
     },
   }
 );
+
+//* plugin for versioning
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 //* static methods for order model
 orderSchema.statics.build = (attrs: orderAttrsType) => {

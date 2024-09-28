@@ -32,6 +32,10 @@ router.put(
         return next(new NotFoundError());
       }
 
+      if(ticket.orderId) {
+        return next(new BadRequestError("Cannot edit a reserved ticket"));
+      }
+
       if (ticket.userId !== req.currentUser!.id) {
         return next(new NotAuthorizedError());
       }

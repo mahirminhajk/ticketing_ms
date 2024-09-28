@@ -5,6 +5,7 @@ export interface ITickets extends Document {
   price: string;
   userId: string;
   version: number;
+  orderId?: string;
 }
 
 export default ITickets;
