@@ -1,7 +1,10 @@
 import { Model, model, Schema } from "mongoose";
-import { ITickets } from "../types";
 import { OrderStatus } from "@km12dev/common";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+
+import { ITickets } from "../types";
 import Orders from "./order"; 
+
 
 //* interface for simple tickets Attributes
 type ticketsAttrsType = {
@@ -12,6 +15,7 @@ type ticketsAttrsType = {
 //* interface for tickets model
 interface ITicketsModel extends Model<ITickets> {
   build(attrs: ticketsAttrsType): ITickets;
+  findByEvent(event: { id: string, version: number }): Promise<ITickets | null>;
 }
 
 //* tickets schema
@@ -37,7 +41,17 @@ const ticketsSchema: Schema<ITickets> = new Schema(
   }
 );
 
+ticketsSchema.set("versionKey", "version");
+ticketsSchema.plugin(updateIfCurrentPlugin);
+
 //* static methods for tickets model
+ticketsSchema.statics.findByEvent = (event: { id: string, version: number }) => {
+  return tickets.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
+};
+
 ticketsSchema.statics.build = (attrs: ticketsAttrsType) => {
   return new tickets({
     _id: attrs.id,

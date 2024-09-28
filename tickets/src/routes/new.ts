@@ -35,6 +35,7 @@ router.post(
         title: ticket.title,
         price: parseInt(ticket.price),
         userId: ticket.userId,
+        version: ticket.version,
       });
 
       return res.status(201).json(ticket);

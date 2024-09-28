@@ -4,10 +4,14 @@ meta {
   seq: 2
 }
 
-post {
-  url: https://ticketing.dev/api/tickets
+put {
+  url: https://ticketing.dev/api/tickets/:id
   body: json
   auth: none
+}
+
+params:path {
+  id: 
 }
 
 body:json {
