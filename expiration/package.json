@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@km12dev/common": "^1.0.10",
+    "@km12dev/common": "^1.0.11",
     "@types/node": "^22.7.4",
     "bull": "^4.16.3",
     "node-nats-streaming": "^0.3.2",
