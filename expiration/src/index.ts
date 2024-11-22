@@ -1,4 +1,5 @@
 import { natsWrapper } from "./nats-wrapper";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 
 //* connect to mongodb
 const startServer = async () => {
@@ -30,6 +31,8 @@ const startServer = async () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
+    //* start listening for events
+    new OrderCreatedListener(natsWrapper.client).listen();
 
   } catch (error) {
     console.error(error);

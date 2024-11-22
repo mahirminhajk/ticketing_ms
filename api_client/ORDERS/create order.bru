@@ -1,0 +1,17 @@
+meta {
+  name: create order
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://ticketing.dev/api/orders
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "ticketId": "67409518159cbd920508a60c"
+  }
+}
