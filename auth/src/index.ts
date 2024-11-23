@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 
 //* connect to mongodb
 const startServer = async () => {
+  console.log("TESTING CI AND CD PIPELINE.......");
+  
   //* check env variables
   if (!process.env.JWT_KEY) {
     throw new Error("JWT_KEY is not defined");
