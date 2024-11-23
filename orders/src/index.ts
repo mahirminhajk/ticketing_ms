@@ -5,6 +5,7 @@ import {
   TicketCreatedListener,
   TicketUpdatedListener,
   ExpirationCompleteListener,
+  PaymentCreatedListener,
 } from "./events/listeners";
 
 //* connect to mongodb
@@ -46,6 +47,7 @@ const startServer = async () => {
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
     new ExpirationCompleteListener(natsWrapper.client).listen();
+    new PaymentCreatedListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to Auth mongodb");

@@ -1,6 +1,8 @@
 import express from "express";
 import cookieSession from "cookie-session";
 
+import { createChargeRouter } from "./routes";
+
 import { currentUser, errorHandler, NotFoundError } from "@km12dev/common";
 
 //* app
@@ -21,7 +23,7 @@ app.use(
 app.use(currentUser);
 
 //* routes
-
+app.use(createChargeRouter);
 
 //* not found route
 app.all("*", () => {
