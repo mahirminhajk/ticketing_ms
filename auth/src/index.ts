@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 //* connect to mongodb
 const startServer = async () => {
   console.log("TESTING CI AND CD PIPELINE.......");
+  console.log("Testing CD pipeline.......");
   
   //* check env variables
   if (!process.env.JWT_KEY) {
