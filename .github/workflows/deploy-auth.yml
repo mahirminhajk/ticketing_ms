@@ -18,3 +18,11 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push mahirminhajk/auth
+      - uses: oracle-actions/login-ocir@v1.3.0
+        with:
+          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
+      - run: oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ap-hyderabad-1.aaaaaaaa4cs5ckclts6fsegqpjjrcltqjzetzw7e7j6va6ayocnviah2vdba --file $HOME/.kube/config --region ap-hyderabad-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
+      - run: kubectl rollout restart deployment auth-depl
+           
+          
+      
