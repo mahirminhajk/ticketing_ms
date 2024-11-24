@@ -52,4 +52,4 @@ jobs:
           KUBECONFIG: /home/runner/.kube/config
       
       - name: APPLY INFRA K8s
-        run: kubectl apply -f infra/k8s      
+        run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
