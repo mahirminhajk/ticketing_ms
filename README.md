@@ -47,6 +47,11 @@ A full-stack ticketing platform where users can buy and sell concert tickets. Bu
 - MongoDB
 - Skaffold
 
+### common
+This is a npm package created by me, used in this project for share code by different services.
+[common git repo](https://github.com/mahirminhajk/km12dev-common)
+[common npm](https://www.npmjs.com/package/@km12dev/common)
+
 ### Installation
 1. Clone the respository
 ```
